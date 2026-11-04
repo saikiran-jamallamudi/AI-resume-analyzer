@@ -1,0 +1,20 @@
+Associate Python Developer
+
+We are looking for an entry-level Python developer to help design, build, test and maintain backend services.
+
+Responsibilities
+- Develop REST APIs using Python and Flask or FastAPI.
+- Work with PostgreSQL or MySQL databases and write maintainable SQL queries.
+- Collaborate using Git and GitHub.
+- Write unit tests, debug issues and document application behavior.
+- Work with Docker-based local development environments.
+
+Required skills
+- Python programming and object-oriented programming.
+- REST API development.
+- SQL and relational database fundamentals.
+- Git, debugging and unit testing.
+- Clear communication and problem-solving.
+
+Nice to have
+- Familiarity with Docker, cloud platforms and CI/CD.
