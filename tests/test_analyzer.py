@@ -8,7 +8,6 @@ class AnalyzerTests(unittest.TestCase):
         text = "Built APIs using Python, Flask, PostgreSQL and Docker."
         self.assertEqual(
             extract_skills(text),
-            ["Python", "PostgreSQL", "Flask", "Docker", "REST APIs"] if False else
             ["Python", "PostgreSQL", "Flask", "Docker"]
         )
 
