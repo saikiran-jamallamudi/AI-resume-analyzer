@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare your resume with a job description and get evidence-based improvement suggestions.">
+  <title>ResumeIQ | AI Resume Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ResumeIQ home">
+      <span class="brand-mark">R</span>
+      <span>resume<span class="brand-light">iq</span></span>
+    </a>
+    <div class="topbar-right"><span class="status-dot"></span> Smart resume analysis</div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow"><span class="sparkle">✳</span> CAREER TOOLKIT <span class="eyebrow-line"></span></div>
+      <h1>Make your next application<br><span class="gradient-text">count.</span></h1>
+      <p class="hero-copy">See how your resume aligns with a job description. Find skill gaps, surface relevant keywords, and get clear next steps.</p>
+      <div class="hero-proof">
+        <span><i class="proof-check">✓</i> Skill gap detection</span>
+        <span><i class="proof-check">✓</i> Keyword insights</span>
+        <span><i class="proof-check">✓</i> Actionable feedback</span>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="Resume analysis form">
+      <div class="workspace-heading">
+        <div><span class="step-label">YOUR WORKSPACE</span><h2>Compare your documents</h2></div>
+        <span class="private-pill"><span>⌑</span> Processed privately</span>
+      </div>
+
+      <form id="analysis-form">
+        <div class="input-grid">
+          <div class="input-panel">
+            <div class="panel-top">
+              <label for="resume-text">01 <span>YOUR RESUME</span></label>
+              <span class="optional-tag">PDF / DOCX / TEXT</span>
+            </div>
+            <div class="upload-zone" id="drop-zone">
+              <input type="file" id="resume-file" accept=".pdf,.docx" hidden>
+              <div class="upload-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M4 16.5v2A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-2"/></svg></div>
+              <div class="upload-copy"><strong>Drop your resume here</strong><span>or <button type="button" class="browse-button" id="browse-button">browse files</button></span></div>
+              <span class="file-hint">PDF or DOCX · Max 5 MB</span>
+              <div id="file-name" class="file-name" aria-live="polite"></div>
+            </div>
+            <div class="or-divider"><span>OR PASTE RESUME TEXT</span></div>
+            <textarea id="resume-text" name="resume_text" placeholder="Paste your resume content here...&#10;&#10;Include your summary, skills, experience, education and projects." required></textarea>
+            <div class="field-foot"><span>Keep personal contact details out of sample data.</span><span id="resume-count">0 characters</span></div>
+          </div>
+
+          <div class="input-panel">
+            <div class="panel-top">
+              <label for="job-description">02 <span>JOB DESCRIPTION</span></label>
+              <span class="optional-tag">REQUIRED</span>
+            </div>
+            <div class="jd-intro"><div class="jd-icon">⌘</div><div><strong>Target role</strong><span>Paste the full job description for a better comparison.</span></div></div>
+            <textarea id="job-description" name="job_description" placeholder="Paste the job description here...&#10;&#10;Include responsibilities, required skills, qualifications and preferred experience." required></textarea>
+            <div class="field-foot"><span>Tip: Include the skills and requirements section.</span><span id="jd-count">0 characters</span></div>
+          </div>
+        </div>
+
+        <div class="form-bottom">
+          <p><span class="shield-icon">◈</span> Your files are processed in memory and are not saved.</p>
+          <button class="analyze-button" id="analyze-button" type="submit"><span>Analyze my resume</span><span class="button-arrow">↗</span></button>
+        </div>
+      </form>
+    </section>
+
+    <div id="error-box" class="error-box" role="alert" hidden></div>
+    <section id="loading" class="loading-panel" hidden>
+      <div class="loader"></div><strong>Reading between the lines</strong><span>Comparing skills and keywords...</span>
+    </section>
+
+    <section id="results" class="results" hidden aria-live="polite">
+      <div class="results-heading">
+        <div><span class="step-label">YOUR ANALYSIS</span><h2>Here’s your alignment report</h2><p id="result-summary"></p></div>
+        <button id="download-button" class="secondary-button" type="button">↓ <span>Download report</span></button>
+      </div>
+      <div class="results-grid">
+        <article class="score-card">
+          <span class="card-kicker">RESUME MATCH</span>
+          <div class="score-ring" id="score-ring"><div><strong id="score-value">0</strong><span>/ 100</span></div></div>
+          <strong class="score-caption" id="score-caption">Skill alignment</strong>
+          <p>This is a keyword-based estimate, not an ATS score or hiring prediction.</p>
+        </article>
+        <article class="metric-card">
+          <span class="card-kicker">SKILL COVERAGE</span>
+          <div class="metric-number"><strong id="skill-coverage">0%</strong><span>of detected job skills</span></div>
+          <div class="progress-track"><div id="skill-progress" class="progress-fill"></div></div>
+          <div class="metric-divider"></div>
+          <div class="metric-foot"><span>Keyword coverage</span><strong id="keyword-coverage">0%</strong></div>
+        </article>
+        <article class="metric-card counts-card">
+          <span class="card-kicker">SKILL BREAKDOWN</span>
+          <div class="count-row"><div class="count-icon matched-icon">✓</div><div><strong id="matched-count">0</strong><span>Matched skills</span></div></div>
+          <div class="count-row"><div class="count-icon missing-icon">＋</div><div><strong id="missing-count">0</strong><span>Skills to review</span></div></div>
+        </article>
+      </div>
+      <div class="skill-grid">
+        <article class="detail-card">
+          <div class="detail-heading"><div><span class="card-kicker">GOOD ALIGNMENT</span><h3>Matched skills</h3></div><span class="pill pill-green" id="matched-pill">0 skills</span></div>
+          <div id="matched-skills" class="skill-chips"></div>
+        </article>
+        <article class="detail-card">
+          <div class="detail-heading"><div><span class="card-kicker">POTENTIAL GAPS</span><h3>Skills to review</h3></div><span class="pill pill-amber" id="missing-pill">0 skills</span></div>
+          <div id="missing-skills" class="skill-chips"></div>
+          <p class="integrity-note">Only add a skill when you can support it with real experience or learning.</p>
+        </article>
+      </div>
+      <article class="recommendations-card">
+        <div class="detail-heading"><div><span class="card-kicker">YOUR NEXT MOVES</span><h3>Recommendations</h3></div><span class="recommendation-spark">✳</span></div>
+        <ol id="recommendations-list" class="recommendations-list"></ol>
+      </article>
+      <div class="results-disclaimer">ResumeIQ highlights text-based alignment. It does not predict interview outcomes or replace a careful human review.</div>
+    </section>
+    <footer><span>resumeiq <span class="footer-dot">●</span> Built to make better applications.</span><span>Thoughtful applications start with clarity.</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>
